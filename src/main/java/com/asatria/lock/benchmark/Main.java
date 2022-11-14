@@ -15,7 +15,7 @@ public class Main {
     public static int R_THREADS = 5;
     public static int W_THREADS = 5;
     public static int ROUNDS = 10;
-    private static String COUNTER = Counters.DIRTY.toString();
+    private static String COUNTER = Counters.SYNCHRONIZED.toString();
 
     private static ExecutorService es;
 
@@ -24,14 +24,13 @@ public class Main {
     private static Executor[][] rounds;
 
     private enum Counters {
-        DIRTY,
         SYNCHRONIZED,
         RWLOCK,
         STAMPED
     }
 
     public static void main(String[] args) {
-        COUNTER = Counters.DIRTY.toString();
+        COUNTER = Counters.SYNCHRONIZED.toString();
 
         if (args.length > 0) {
             COUNTER = args[0];
@@ -95,7 +94,9 @@ public class Main {
 
             try {
                 Thread.sleep(EXECUTION_PERIOD_IN_SEC * 1000L);
+
                 es.shutdownNow();
+
                 es.awaitTermination(1, TimeUnit.MINUTES);
             } catch (InterruptedException e) {
                 e.printStackTrace();
