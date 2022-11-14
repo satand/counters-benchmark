@@ -1,21 +1,21 @@
-package com.takipi.tests.counters.implementations;
+package com.asatria.lock.benchmark.implementations;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import com.takipi.tests.counters.Counter;
+import com.asatria.lock.benchmark.Counter;
 
 public class RWLock implements Counter
 {
-	private ReadWriteLock rwlock = new ReentrantReadWriteLock();
+	private final ReadWriteLock rwlock = new ReentrantReadWriteLock();
 	
-	private Lock rlock = rwlock.readLock();
-	private Lock wlock = rwlock.writeLock();
+	private final Lock rlock = rwlock.readLock();
+	private final Lock wlock = rwlock.writeLock();
 	
 	private long counter;
 	
-	public long getCounter()
+	public long get()
 	{
 		try
 		{

@@ -1,14 +1,14 @@
-package com.takipi.tests.counters.implementations;
+package com.asatria.lock.benchmark.implementations;
 
-import com.takipi.tests.counters.Counter;
+import com.asatria.lock.benchmark.Counter;
 
 public class Synchronized implements Counter
 {
-	private Object lock = new Object();
+	private final Object lock = new Object();
 	
 	private int counter;
 	
-	public long getCounter()
+	public long get()
 	{
 		synchronized (lock)
 		{
@@ -16,7 +16,7 @@ public class Synchronized implements Counter
 		}
 	}
 	
-	public void increment() 
+	public void increment()
 	{
 		synchronized (lock)
 		{
