@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
 
-    public static int EXECUTION_PERIOD_IN_SEC = 60;
+    public static int ROUND_DURATION_IN_SEC = 60;
     public static int R_THREADS = 5;
     public static int W_THREADS = 5;
     public static int ROUNDS = 10;
@@ -51,13 +51,13 @@ public class Main {
         }
 
         if (args.length > 4) {
-            EXECUTION_PERIOD_IN_SEC = Integer.valueOf(args[4]);
+            ROUND_DURATION_IN_SEC = Integer.valueOf(args[4]);
         }
 
         rounds = new Executor[ROUNDS][R_THREADS + W_THREADS];
 
         System.out.println("Using " + COUNTER + ". read threads: " + R_THREADS + ". write threads: " + W_THREADS + ". rounds: " + ROUNDS +
-                ". execution period (sec): " + EXECUTION_PERIOD_IN_SEC);
+                ". round duration (sec): " + ROUND_DURATION_IN_SEC);
 
         DecimalFormat df = new DecimalFormat("###,###,###,###,###");
 
@@ -97,7 +97,7 @@ public class Main {
             }
 
             try {
-                Thread.sleep(EXECUTION_PERIOD_IN_SEC * 1000L);
+                Thread.sleep(ROUND_DURATION_IN_SEC * 1000L);
 
                 es.shutdownNow();
 
@@ -106,10 +106,10 @@ public class Main {
                 e.printStackTrace();
             }
 
-            System.out.println("r/s: " + df.format(Arrays.stream(rounds[round]).map(Executor::getExecutionCount).reduce(Long::sum).get() / EXECUTION_PERIOD_IN_SEC));
+            System.out.println("r/s: " + df.format(Arrays.stream(rounds[round]).map(Executor::getExecutionCount).reduce(Long::sum).get() / ROUND_DURATION_IN_SEC));
         }
 
-        System.out.println("Average r/s: " +  df.format((Arrays.stream(rounds).flatMap(Arrays::stream).map(Executor::getExecutionCount).reduce(Long::sum).get() / ((long) EXECUTION_PERIOD_IN_SEC * ROUNDS))));
+        System.out.println("Average r/s: " +  df.format((Arrays.stream(rounds).flatMap(Arrays::stream).map(Executor::getExecutionCount).reduce(Long::sum).get() / ((long) ROUND_DURATION_IN_SEC * ROUNDS))));
     }
 
     public static Counter getCounter() {
