@@ -4,6 +4,7 @@ import com.asatria.lock.benchmark.implementations.RWLock;
 import com.asatria.lock.benchmark.implementations.Stamped;
 import com.asatria.lock.benchmark.implementations.Synchronized;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
+
     public static int EXECUTION_PERIOD_IN_SEC = 60;
     public static int R_THREADS = 5;
     public static int W_THREADS = 5;
@@ -57,6 +59,8 @@ public class Main {
         System.out.println("Using " + COUNTER + ". read threads: " + R_THREADS + ". write threads: " + W_THREADS + ". rounds: " + ROUNDS +
                 ". execution period (sec): " + EXECUTION_PERIOD_IN_SEC);
 
+        DecimalFormat df = new DecimalFormat("###,###,###,###,###");
+
         for (round = 0; round < ROUNDS; round++) {
 
             Counter counter = getCounter();
@@ -102,10 +106,10 @@ public class Main {
                 e.printStackTrace();
             }
 
-            System.out.println(Arrays.stream(rounds[round]).map(Executor::getExecutionCount).reduce(Long::sum).get() / EXECUTION_PERIOD_IN_SEC);
+            System.out.println("r/s: " + df.format(Arrays.stream(rounds[round]).map(Executor::getExecutionCount).reduce(Long::sum).get() / EXECUTION_PERIOD_IN_SEC));
         }
 
-        System.out.println("Average: " + (Arrays.stream(rounds).flatMap(Arrays::stream).map(Executor::getExecutionCount).reduce(Long::sum).get() / EXECUTION_PERIOD_IN_SEC) / ROUNDS);
+        System.out.println("Average r/s: " +  df.format((Arrays.stream(rounds).flatMap(Arrays::stream).map(Executor::getExecutionCount).reduce(Long::sum).get() / ((long) EXECUTION_PERIOD_IN_SEC * ROUNDS))));
     }
 
     public static Counter getCounter() {
